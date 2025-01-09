@@ -20,7 +20,7 @@ export const pipelineConfig = (env: string) => {
   return {
     buildCommand: 'yarn build:dev',
     deployCommand: 'yarn cdk:dev deploy',
-    branch: 'dev',
+    branch: 'upstream-chap5',
     tag: 'chapter5-development-pipeline',
     githubToken: parsed?.GITHUB_TOKEN,
     workspaceId: parsed?.WORKSPACE_ID,

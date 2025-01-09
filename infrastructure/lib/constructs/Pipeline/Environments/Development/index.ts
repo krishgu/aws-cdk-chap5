@@ -184,7 +184,7 @@ export class DevelopmentPipeline extends Construct {
           actionName: 'Source',
           owner: 'westpoint-io',
           repo: 'AWS-CDK-in-Action-Chapter-5',
-          branch: 'dev',
+          branch: 'upstream-chap5',
           oauthToken: secretToken,
           output: outputSource,
           trigger: GitHubTrigger.WEBHOOK,

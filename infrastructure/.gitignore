@@ -15,3 +15,7 @@ cdk.context.json
 .env
 .env.*
 config.json
+chapter-3-building-a-full-stack-app-with-cdk
+chapter-4-complete-web-application-deployment-with-aws-cdk
+node_modules/
+yarn.lock

@@ -69,7 +69,7 @@ export class DevelopmentPipeline extends Construct {
           phases: {
             install: {
               'runtime-versions': {
-                nodejs: '16',
+                nodejs: '20',
               },
             },
             pre_build: {
@@ -101,7 +101,7 @@ export class DevelopmentPipeline extends Construct {
           phases: {
             install: {
               'runtime-versions': {
-                nodejs: '16',
+                nodejs: '20',
               },
             },
             pre_build: {
@@ -151,7 +151,7 @@ export class DevelopmentPipeline extends Construct {
           phases: {
             install: {
               'runtime-versions': {
-                nodejs: '16',
+                nodejs: '20',
               },
             },
             pre_build: {

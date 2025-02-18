@@ -1,9 +1,11 @@
 const mysql = require('mysql');
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
+import {
+  GetSecretValueCommand,
+  SecretsManagerClient,
+} from "@aws-sdk/client-secrets-manager";
 const fs = require('fs');
 const path = require('path');
-
-const secrets = new AWS.SecretsManager({});
 
 function query(connection, sql) {
   return new Promise((resolve, reject) => {
@@ -15,20 +17,35 @@ function query(connection, sql) {
   });
 }
 
-function getSecretValue(secretId) {
-  return new Promise((resolve, reject) => {
-    secrets.getSecretValue({ SecretId: secretId }, (err, data) => {
-      if (err) return reject(err);
-
-      return resolve(JSON.parse(data.SecretString));
-    });
-  });
+function getSecretValueJ3(secretId) {
+  const secretVal_JSON = async (secretName = secretId) => {
+    const client = new SecretsManagerClient();
+    const response = await client.send(
+      new GetSecretValueCommand({
+        SecretId: secretName,
+      }),
+    );
+  
+    return JSON.parse(response.SecretString);
+  };
+  return secretVal_JSON;
 }
+
+
+// function getSecretValue(secretId) {
+//   return new Promise((resolve, reject) => {
+//     secrets.getSecretValue({ SecretId: secretId }, (err, data) => {
+//       if (err) return reject(err);
+
+//       return resolve(JSON.parse(data.SecretString));
+//     });
+//   });
+// }
 
 exports.handler = async e => {
   try {
     const { config } = e.params;
-    const { password, username, host } = await getSecretValue(
+    const { password, username, host } =  getSecretValueJ3(
       config.credentials_secret_name,
     );
     const connection = mysql.createConnection({

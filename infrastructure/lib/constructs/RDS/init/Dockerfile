@@ -1,4 +1,4 @@
-FROM amazon/aws-lambda-nodejs:18
+FROM amazon/aws-lambda-nodejs:20
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 COPY package.json ./

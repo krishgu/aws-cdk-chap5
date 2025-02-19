@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "RDS initialization implementation in Node.js",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.750.0",
+    "aws-sdk": "^2.1692.0",
     "mysql": "^2.18.1"
   },
   "type": "module"

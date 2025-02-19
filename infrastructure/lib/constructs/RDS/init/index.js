@@ -1,11 +1,10 @@
-const mysql = require('mysql');
-// const AWS = require('aws-sdk');
+import mysql from 'mysql';
 import {
   GetSecretValueCommand,
   SecretsManagerClient,
 } from "@aws-sdk/client-secrets-manager";
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 function query(connection, sql) {
   return new Promise((resolve, reject) => {
@@ -25,29 +24,19 @@ function getSecretValueJ3(secretId) {
         SecretId: secretName,
       }),
     );
-  
+    console.log("Got from secrets " + " <<< " + JSON.stringify(response.SecretString) + ">>>");
     return JSON.parse(response.SecretString);
   };
   return secretVal_JSON;
 }
 
-
-// function getSecretValue(secretId) {
-//   return new Promise((resolve, reject) => {
-//     secrets.getSecretValue({ SecretId: secretId }, (err, data) => {
-//       if (err) return reject(err);
-
-//       return resolve(JSON.parse(data.SecretString));
-//     });
-//   });
-// }
-
-exports.handler = async e => {
+export const handler = async e => {
   try {
     const { config } = e.params;
     const { password, username, host } =  getSecretValueJ3(
       config.credentials_secret_name,
     );
+    console.log(`got secrets -- {host}, {username}`);
     const connection = mysql.createConnection({
       host,
       user: username,
@@ -61,7 +50,7 @@ exports.handler = async e => {
       .readFileSync(path.join(__dirname, 'script.sql'))
       .toString();
     const res = await query(connection, sqlScript);
-
+    console.log("Ran script mysql -- exiting well");
     return {
       status: 'OK',
       results: res,

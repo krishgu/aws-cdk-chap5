@@ -6,6 +6,11 @@ import {
 import fs from 'fs';
 import path from 'path';
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+
+
 function query(connection, sql) {
   return new Promise((resolve, reject) => {
     connection.query(sql, (error, res) => {
@@ -36,7 +41,7 @@ export const handler = async e => {
     const { password, username, host } =  getSecretValueJ3(
       config.credentials_secret_name,
     );
-    console.log(`got secrets -- {host}, {username}`);
+    console.log(`got secrets -- ${host}, ${username}`);
     const connection = mysql.createConnection({
       host,
       user: username,
@@ -45,12 +50,14 @@ export const handler = async e => {
     });
 
     connection.connect();
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
 
     const sqlScript = fs
       .readFileSync(path.join(__dirname, 'script.sql'))
       .toString();
     const res = await query(connection, sqlScript);
-    console.log("Ran script mysql -- exiting well");
+    console.log("Ran script ${__dirname}/script.sql -- mysql -- exiting well");
     return {
       status: 'OK',
       results: res,

@@ -21,9 +21,10 @@ function query(connection, sql) {
   });
 }
 
-function getSecretValueJ3(secretId) {
-  const secretVal_JSON = async (secretName = secretId) => {
+async function getSecretValueJ3(secretId) {
+  const secretVal_JSON = async (secretName) => {
     const client = new SecretsManagerClient();
+    console.log("Trying to get secrets from " + secretName)
     const response = await client.send(
       new GetSecretValueCommand({
         SecretId: secretName,
@@ -32,13 +33,16 @@ function getSecretValueJ3(secretId) {
     console.log("Got from secrets " + " <<< " + JSON.stringify(response.SecretString) + ">>>");
     return JSON.parse(response.SecretString);
   };
-  return secretVal_JSON;
+  return secretVal_JSON(secretId);
 }
 
 export const handler = async e => {
   try {
     const { config } = e.params;
-    const { password, username, host } =  getSecretValueJ3(
+    console.log("Event is " + e);
+    console.log("Params or Config is " + e.params);
+
+    const { password, username, host } =  await getSecretValueJ3(
       config.credentials_secret_name,
     );
     console.log(`got secrets -- ${host}, ${username}`);
